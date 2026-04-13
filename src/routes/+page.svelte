@@ -19,6 +19,15 @@
         <div class="small-circle">
 
         </div>
+        <div class="small-circle">
+
+        </div>
+        <div class="small-circle">
+
+        </div>
+        <div class="small-circle">
+
+        </div>
     </div>
 </main>
 
@@ -32,7 +41,7 @@ main {
 }
 
 #main-circle {
-    display: grid;
+    display: inline-grid;
 
     width: 50vh;
     height: 50vh;
@@ -46,11 +55,6 @@ main {
     transition: all 0.5s;
 }
 
-#main-circle:hover {
-    border: 25px inset var(--main-hover-color);
-    box-shadow: 0px 0px 30px 0px var(--main-hover-color);
-}
-
 .small-circle {
     width: 100px;
     height: 100px;
@@ -58,6 +62,9 @@ main {
     border-color: inherit;
     background-color: var(--bg-color);
     border-radius: 50%;
+
+    grid-area: 1/1;
+    offset: circle(320px) calc(100%*sibling-index()/sibling-count()) 0deg;
 
     transition: inherit;
 }
