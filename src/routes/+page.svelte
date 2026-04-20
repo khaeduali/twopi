@@ -1,7 +1,11 @@
 <script>
-	import { onMount } from "svelte";
+import {
+    onMount
+} from "svelte";
 
 const circle_count = 8;
+
+let expanded_circle_index = -1;
 
 onMount(() => init());
 
@@ -13,14 +17,21 @@ function init() {
     }
 }
 
+function clickSmallCircle(index) {
+    expanded_circle_index = index
+}
 </script>
 
 <main>
     <div id="main-circle">
-        {#each {length: 8}}
-        <div class="small-circle">
-
-        </div>  
+        {#each {length: 8}, i}
+        <div class="small-circle" class:expanded= {i === expanded_circle_index} on:click={() => clickSmallCircle(i)}>
+            {#if expanded_circle_index === i}
+                
+            {/if}
+            
+            <p>hej</p>
+        </div>
         {/each}
     </div>
 </main>
@@ -40,16 +51,16 @@ main {
     width: 50vh;
     height: 50vh;
     margin: auto;
-    
+
     border: 16px inset var(--main-color);
     border-radius: 50%;
 
-    transition: all 0.5s;
+    transition: all var(--transition-length);
 }
 
 .small-circle {
-    width: 100px;
-    height: 100px;
+    width: 11vh;
+    height: 11vh;
     border: 16px solid;
     border-color: inherit;
     background-color: var(--bg-color);
@@ -57,20 +68,45 @@ main {
 
     grid-area: 1/1;
     offset: circle(36vh) 0deg;
+    display: flex;
 
-    transition: inherit;
+    z-index: 0;
+    transition: offset var(--transition-length) ease-in-out var(--transition-length), width var(--transition-length) ease-in-out 0s, height var(--transition-length) ease-in-out 0s;
 }
 
-.small-circle:hover {
+.small-circle:not(.expanded) {
+    cursor:pointer;
+}
+
+.small-circle:not(.expanded):active {
     border-width: 5px;
 }
 
-.small-circle:nth-child(4), .small-circle:nth-child(8) {
+.small-circle:nth-child(4),
+.small-circle:nth-child(8) {
     border-style: inset;
 }
 
-.small-circle:nth-child(5), .small-circle:nth-child(6), .small-circle:nth-child(7) {
+.small-circle:nth-child(5),
+.small-circle:nth-child(6),
+.small-circle:nth-child(7) {
     border-color: var(--inner-color);
 }
 
+.expanded {
+    offset: circle(0vh) 0deg;
+    width: 50vh;
+    height: 50vh;
+
+    z-index: 9;
+    transition: offset var(--transition-length) ease-in-out 0s, width var(--transition-length) ease-in-out var(--transition-length), height var(--transition-length) ease-in-out var(--transition-length);
+}
+
+p {
+    color: var(--main-color);
+    font-family: 'Courier New', Courier, monospace;
+    margin: auto;
+    font-weight: bolder;
+    user-select: none;
+}
 </style>

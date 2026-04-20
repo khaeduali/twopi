@@ -25,5 +25,7 @@ let {
 	--inner-hover-color: #FFC4FFAA;
 	--main-color: #FFEF99;
 	--main-hover-color: #FFC4FF;
+
+    --transition-length: 0.3s;
 }
 </style>
