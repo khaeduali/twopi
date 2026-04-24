@@ -3,9 +3,13 @@ import {
     onMount
 } from "svelte";
 
+const time_type = 0
+
 const circle_count = 8;
 
-let expanded_circle_index = -1;
+let expanded_circle_index = $state(-1);
+
+let time = $state(new Date(0));
 
 onMount(() => init());
 
@@ -15,6 +19,8 @@ function init() {
     for (let i = 0; i < circle_count; i++) {
         circles[i].style.offsetDistance = "calc(100% * " + (i / circle_count) + ")";
     }
+
+    setInterval(() => time = new Date(Date.now()), 10)
 }
 
 function clickSmallCircle(index) {
@@ -26,11 +32,13 @@ function clickSmallCircle(index) {
     <div id="main-circle">
         {#each {length: 8}, i}
         <div class="small-circle" class:expanded= {i === expanded_circle_index} on:click={() => clickSmallCircle(i)}>
+        {#switch i}
+        {:case time_type}   
             {#if expanded_circle_index === i}
-                
+            <p>{time.toLocaleDateString()}</p>
             {/if}
-            
-            <p>hej</p>
+            <p>{time.toLocaleTimeString()}</p>
+        {/switch}
         </div>
         {/each}
     </div>
@@ -75,7 +83,7 @@ main {
 }
 
 .small-circle:not(.expanded) {
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .small-circle:not(.expanded):active {
