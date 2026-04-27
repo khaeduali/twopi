@@ -1,15 +1,25 @@
 <script>
+/** @type {import('./$types').PageData} */
+let {data} = $props()
+
 import {
     onMount
 } from "svelte";
 
 const time_type = 0
+const weather_type = 1
+const news_type = 2
+const settings_type = 3
+const notes_type = 4
+const media_type = 5
 
-const circle_count = 8;
+const circle_count = 6;
 
 let expanded_circle_index = $state(-1);
 
 let time = $state(new Date(0));
+
+let temp = $state(0)
 
 onMount(() => init());
 
@@ -20,7 +30,11 @@ function init() {
         circles[i].style.offsetDistance = "calc(100% * " + (i / circle_count) + ")";
     }
 
-    setInterval(() => time = new Date(Date.now()), 10)
+    setInterval(() => update(), 100)
+}
+
+function update() {
+    time = new Date(Date.now())
 }
 
 function clickSmallCircle(index) {
@@ -30,16 +44,35 @@ function clickSmallCircle(index) {
 
 <main>
     <div id="main-circle">
-        {#each {length: 8}, i}
-        <div class="small-circle" class:expanded= {i === expanded_circle_index} on:click={() => clickSmallCircle(i)}>
+        {#each {length: circle_count}, i}
+        <button class="small-circle" class:expanded= {i === expanded_circle_index} on:click={() => clickSmallCircle(i)}>
         {#switch i}
         {:case time_type}   
             {#if expanded_circle_index === i}
             <p>{time.toLocaleDateString()}</p>
             {/if}
             <p>{time.toLocaleTimeString()}</p>
+
+        {:case weather_type}
+        {#await data}
+            <p>...</p>
+        {:then weather} 
+            <p>{weather.response_weather.current.temperature_2m}° C</p>
+        {/await}
+
+        {:case news_type}
+            <p>NEWS</p>
+            
+        {:case settings_type}
+            <p>SETTINGS</p>
+            
+        {:case notes_type}
+            <p>NOTES</p>
+            
+        {:case media_type}
+            <p>MEDIA</p>
         {/switch}
-        </div>
+        </button>
         {/each}
     </div>
 </main>
